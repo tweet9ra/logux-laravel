@@ -1,0 +1,53 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "b5c8aa11f90d214e737b7782d9760800",
+    "packages": [
+        {
+            "name": "tweet9ra/logux-processor",
+            "version": "0.1.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tweet9ra/logux-php.git",
+                "reference": "9763ebebbd7852db5b8f721b908af931fd0c67c2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tweet9ra/logux-php/zipball/9763ebebbd7852db5b8f721b908af931fd0c67c2",
+                "reference": "9763ebebbd7852db5b8f721b908af931fd0c67c2",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "tweet9ra\\Logux\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Segey Naumov",
+                    "email": "tweet9ra@mail.ru"
+                }
+            ],
+            "time": "2019-12-04T11:04:59+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

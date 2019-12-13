@@ -1,0 +1,21 @@
+{
+    "name": "tweet9ra/logux-laravel",
+    "description": "Laravel adator for tweet9ra/logux-php",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sergey Naumov",
+            "email": "tweet9ra@mail.ru"
+        }
+    ],
+    "require": {
+        "tweet9ra/logux-processor": "^1.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "tweet9ra\\Logux\\Laravel\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
