@@ -50,7 +50,7 @@ class LoguxServiceProvider extends ServiceProvider
                 }
             );
 
-        Route::post(config('logux.endpoint_url'), function () {
+        $route = Route::post(config('logux.endpoint_url'), function () {
             /** @var LoguxApp $app */
             $app = app(LoguxApp::class);
 
@@ -61,6 +61,10 @@ class LoguxServiceProvider extends ServiceProvider
 
             return json_encode($responseContent);
         });
+
+        if ($middleware = config('logux.middleware')) {
+            $route->middleware($middleware);
+        }
 
         $this->app->bind(DispatchableAction::class, function () {
             return new DispatchableAction();
