@@ -2,6 +2,7 @@
 
 namespace tweet9ra\Logux\Laravel;
 
+use App\Exceptions\Handler;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -26,6 +27,8 @@ class LoguxServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        $app = LoguxApp::getInstance();
+
         $this->publishes([
             __DIR__.'/../config/config.php' => config_path('logux.php')
         ], 'config');
@@ -38,22 +41,20 @@ class LoguxServiceProvider extends ServiceProvider
             __DIR__.'/../config/subscription-routes.php' => base_path('/routes/logux-subscription.php')
         ], 'routes');
 
-        LoguxApp::getInstance()
-            ->addEvent(
-                LoguxApp::BEFORE_PROCESS_ACTION,
-                function (ProcessableAction $action) {
-                    if ($action->userId) {
-                        Auth::loginUsingId($action->userId);
-                    } else {
-                        Auth::logout();
-                    }
+        // Authenticate users before each action
+        $app->addEvent(
+            LoguxApp::BEFORE_PROCESS_ACTION,
+            function (ProcessableAction $action) {
+                if ($action->userId) {
+                    Auth::loginUsingId($action->userId);
+                } else {
+                    Auth::logout();
                 }
-            );
+            }
+        );
 
-        $route = Route::post(config('logux.endpoint_url'), function () {
-            /** @var LoguxApp $app */
-            $app = app(LoguxApp::class);
-
+        // Registering route that handle logux requests
+        $route = Route::post(config('logux.endpoint_url'), function () use ($app) {
             $app->setActionsMap($this->loadRoutes());
 
             $request = json_decode(request()->getContent(), true);
