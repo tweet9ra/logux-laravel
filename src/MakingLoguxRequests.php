@@ -30,6 +30,12 @@ trait MakingLoguxRequests
         $this->loguxDispatcher = $dispatcher;
     }
 
+    /**
+     * @param string $actionType
+     * @param string $userId
+     * @param array $arguments
+     * @return \Illuminate\Foundation\Testing\TestResponse
+     */
     protected function loguxCallAction(string $actionType, string $userId, array $arguments = [])
     {
         $t = time();
@@ -40,6 +46,10 @@ trait MakingLoguxRequests
         ]]);
     }
 
+    /**
+     * @param array $commands
+     * @return \Illuminate\Foundation\Testing\TestResponse
+     */
     public function loguxRequest(array $commands)
     {
         return $this->postJson(config('logux.endpoint_url'), [
