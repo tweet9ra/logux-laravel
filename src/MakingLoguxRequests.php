@@ -32,13 +32,18 @@ trait MakingLoguxRequests
 
     /**
      * @param string $actionType
-     * @param string $userId
+     * @param string|int|false $userId
      * @param array $arguments
      * @return \Illuminate\Foundation\Testing\TestResponse
      */
-    protected function loguxCallAction(string $actionType, string $userId, array $arguments = [])
+    protected function loguxCallAction(string $actionType, $userId = null, array $arguments = [])
     {
         $t = time();
+
+        if (!$userId) {
+            $userId = 'false';
+        }
+
         return $this->loguxRequest([[
             'action',
             array_merge(['type' => $actionType], $arguments),
