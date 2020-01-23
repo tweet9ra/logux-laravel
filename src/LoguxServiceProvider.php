@@ -12,6 +12,8 @@ use tweet9ra\Logux\ProcessableAction;
 
 class LoguxServiceProvider extends ServiceProvider
 {
+    protected static $routes;
+
     public function register()
     {
         LoguxApp::getInstance()->loadConfig(
@@ -74,6 +76,10 @@ class LoguxServiceProvider extends ServiceProvider
 
     private function loadRoutes()
     {
-        return require_once config('logux.routes_path', base_path('/routes/logux.php'));
+        if (!self::$routes) {
+            self::$routes = require config('logux.routes_path', base_path('/routes/logux.php'));
+        }
+
+        return self::$routes;
     }
 }
