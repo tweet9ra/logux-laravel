@@ -34,9 +34,15 @@ trait MakingLoguxRequests
      * @param string $actionType
      * @param string|int|false $userId
      * @param array $arguments
+     * @param bool $checkResponseStatus
      * @return \Illuminate\Foundation\Testing\TestResponse
      */
-    protected function loguxCallAction(string $actionType, $userId = null, array $arguments = [])
+    protected function loguxCallAction(
+        string $actionType,
+        $userId = null,
+        array $arguments = [],
+        $checkResponseStatus = true
+    )
     {
         $t = time();
 
@@ -48,19 +54,26 @@ trait MakingLoguxRequests
             'action',
             array_merge(['type' => $actionType], $arguments),
             ['id' => "$t $userId:testtt:testtt $userId", 'time' => $t]
-        ]]);
+        ]], $checkResponseStatus);
     }
 
     /**
      * @param array $commands
+     * @param bool $checkResponseStatus
      * @return \Illuminate\Foundation\Testing\TestResponse
      */
-    public function loguxRequest(array $commands)
+    public function loguxRequest(array $commands, $checkResponseStatus = true)
     {
-        return $this->postJson(config('logux.endpoint_url'), [
+        $response = $this->postJson(config('logux.endpoint_url'), [
             'version' => App::getInstance()->getVersion(),
             'password' => App::getInstance()->getControlPassword(),
             'commands' => $commands
         ]);
+
+        if ($checkResponseStatus) {
+            $response->assertStatus(200);
+        }
+
+        return $response;
     }
 }
