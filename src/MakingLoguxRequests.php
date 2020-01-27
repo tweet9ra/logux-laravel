@@ -35,7 +35,7 @@ trait MakingLoguxRequests
      * @param string|int|false $userId
      * @param array $arguments
      * @param bool $checkResponseStatus
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return LoguxTestResponse
      */
     protected function loguxCallAction(
         string $actionType,
@@ -60,7 +60,7 @@ trait MakingLoguxRequests
     /**
      * @param array $commands
      * @param bool $checkResponseStatus
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return LoguxTestResponse
      */
     public function loguxRequest(array $commands, $checkResponseStatus = true)
     {
@@ -70,10 +70,12 @@ trait MakingLoguxRequests
             'commands' => $commands
         ]);
 
+        $loguxResponse = new LoguxTestResponse($response);
+
         if ($checkResponseStatus) {
-            $response->assertStatus(200);
+            $loguxResponse->assertStatus(200);
         }
 
-        return $response;
+        return $loguxResponse;
     }
 }
