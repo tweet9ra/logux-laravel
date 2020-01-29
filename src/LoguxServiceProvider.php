@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use tweet9ra\Logux\App as LoguxApp;
 use tweet9ra\Logux\DispatchableAction;
+use tweet9ra\Logux\EventsHandler;
 use tweet9ra\Logux\ProcessableAction;
 
 class LoguxServiceProvider extends ServiceProvider
@@ -44,16 +45,17 @@ class LoguxServiceProvider extends ServiceProvider
         ], 'routes');
 
         // Authenticate users before each action
-        $app->addEvent(
-            LoguxApp::BEFORE_PROCESS_ACTION,
-            function (ProcessableAction $action) {
-                if ($action->userId) {
-                    Auth::loginUsingId($action->userId);
-                } else {
-                    Auth::logout();
+        $app->getEventsHandler()
+            ->addEvent(
+                EventsHandler::BEFORE_PROCESS_ACTION,
+                function (ProcessableAction $action) {
+                    if ($action->userId()) {
+                        Auth::loginUsingId($action->userId());
+                    } else {
+                        Auth::logout();
+                    }
                 }
-            }
-        );
+            );
 
         // Registering route that handle logux requests
         $route = Route::post(config('logux.endpoint_url'), function () use ($app) {

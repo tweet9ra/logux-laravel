@@ -78,4 +78,11 @@ trait MakingLoguxRequests
 
         return $loguxResponse;
     }
+
+    public function assertLoguxActionDispatched(string $actionType)
+    {
+        $action = $this->loguxDispatcher->search($actionType);
+        $this->assertTrue(!empty($action), "Action $actionType was not dispatched");
+        return $action;
+    }
 }
