@@ -50,9 +50,9 @@ class LoguxTestResponse
     public function assertActionHasError(array $errorMessages = null)
     {
         if ($errorMessages) {
-            $this->assertJson(array_merge(['error'], $errorMessages));
+            $this->assertJson([array_merge(['error'], $errorMessages)]);
         } else {
-            $this->assertJson(['error']);
+            $this->assertJson([['error']]);
         }
     }
 }
