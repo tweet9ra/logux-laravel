@@ -4,6 +4,7 @@
 namespace tweet9ra\Logux\Laravel;
 
 use Illuminate\Foundation\Testing\TestResponse;
+use \Illuminate\Foundation\Testing\Assert as PHPUnit;
 
 /**
  * Logux response decorator for TestResponse
@@ -54,5 +55,30 @@ class LoguxTestResponse
         } else {
             $this->assertJson([['error']]);
         }
+    }
+
+    public function assertActionWasResendedTo(array $recipients)
+    {
+        $resends = [];
+        foreach ($this->json() as $actions) {
+            if ($actions[0] === 'resend') {
+                $resends[] = $actions[2];
+            } else {
+                continue;
+            }
+
+            if ($actions[2] === $recipients) {
+                return $this;
+            }
+        }
+
+        $strResends = implode("\n", array_map(function ($el) {
+            return print_r($el, true);
+        }, $resends));
+
+        PHPUnit::fail("\nUnable to find resended action to recipients: \n".print_r($recipients, true)
+            . "\nFounded resends: \n" . $strResends."\n");
+
+        return $this;
     }
 }
