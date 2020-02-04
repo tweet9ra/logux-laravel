@@ -68,6 +68,9 @@ class LoguxServiceProvider extends ServiceProvider
         });
 
         if ($middleware = config('logux.middleware')) {
+            if (is_string($middleware)) {
+                $middleware = explode(',', $middleware);
+            }
             $route->middleware($middleware);
         }
 
