@@ -64,7 +64,7 @@ class LoguxServiceProvider extends ServiceProvider
             $request = json_decode(request()->getContent(), true);
             $responseContent = $app->processRequest($request);
 
-            return json_encode($responseContent);
+            return json_encode($responseContent, JSON_UNESCAPED_UNICODE);
         });
 
         if ($middleware = config('logux.middleware')) {
