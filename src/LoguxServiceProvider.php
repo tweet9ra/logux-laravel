@@ -49,7 +49,7 @@ class LoguxServiceProvider extends ServiceProvider
             ->addEvent(
                 EventsHandler::BEFORE_PROCESS_ACTION,
                 function (ProcessableAction $action) {
-                    if ($action->userId()) {
+                    if ($action->userId() && $action->userId() != 'false') {
                         Auth::loginUsingId($action->userId());
                     } else {
                         Auth::logout();
