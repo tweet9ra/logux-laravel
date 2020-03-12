@@ -28,7 +28,7 @@ return [
         (new DispatchableAction)
             ->setType('NEW_CHAT_MESSAGE')
             ->sendTo('channels', ['chats/1337'])
-            ->sendTo('users', [Auth::id()]) // You can use auth facade here, Auth::id() == $action->userId
+            ->sendTo('users', [Auth::id()]) // You can use auth facade here, Auth::id() == $action->uerId()
             ->setArguments(['message' => 'hello world'])
             ->setArgument('textColor', 'red')
             ->dispatch();

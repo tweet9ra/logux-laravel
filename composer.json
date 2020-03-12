@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "tweet9ra/logux-processor": "^1.0.0"
+        "tweet9ra/logux-processor": "^2.0.0"
     },
     "autoload": {
         "psr-4": {

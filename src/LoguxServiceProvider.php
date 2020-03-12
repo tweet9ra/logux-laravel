@@ -2,15 +2,19 @@
 
 namespace tweet9ra\Logux\Laravel;
 
+use App\Exceptions\Handler;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use tweet9ra\Logux\App as LoguxApp;
 use tweet9ra\Logux\DispatchableAction;
+use tweet9ra\Logux\EventsHandler;
 use tweet9ra\Logux\ProcessableAction;
 
 class LoguxServiceProvider extends ServiceProvider
 {
+    protected static $routes;
+
     public function register()
     {
         LoguxApp::getInstance()->loadConfig(
@@ -26,6 +30,8 @@ class LoguxServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        $app = LoguxApp::getInstance();
+
         $this->publishes([
             __DIR__.'/../config/config.php' => config_path('logux.php')
         ], 'config');
@@ -38,29 +44,35 @@ class LoguxServiceProvider extends ServiceProvider
             __DIR__.'/../config/subscription-routes.php' => base_path('/routes/logux-subscription.php')
         ], 'routes');
 
-        LoguxApp::getInstance()
+        // Authenticate users before each action
+        $app->getEventsHandler()
             ->addEvent(
-                LoguxApp::BEFORE_PROCESS_ACTION,
+                EventsHandler::BEFORE_PROCESS_ACTION,
                 function (ProcessableAction $action) {
-                    if ($action->userId) {
-                        Auth::loginUsingId($action->userId);
+                    if ($action->userId() && $action->userId() != 'false') {
+                        Auth::loginUsingId($action->userId());
                     } else {
                         Auth::logout();
                     }
                 }
             );
 
-        Route::post(config('logux.endpoint_url'), function () {
-            /** @var LoguxApp $app */
-            $app = app(LoguxApp::class);
-
+        // Registering route that handle logux requests
+        $route = Route::post(config('logux.endpoint_url'), function () use ($app) {
             $app->setActionsMap($this->loadRoutes());
 
             $request = json_decode(request()->getContent(), true);
             $responseContent = $app->processRequest($request);
 
-            return json_encode($responseContent);
+            return json_encode($responseContent, JSON_UNESCAPED_UNICODE);
         });
+
+        if ($middleware = config('logux.middleware')) {
+            if (is_string($middleware)) {
+                $middleware = explode(',', $middleware);
+            }
+            $route->middleware($middleware);
+        }
 
         $this->app->bind(DispatchableAction::class, function () {
             return new DispatchableAction();
@@ -69,6 +81,10 @@ class LoguxServiceProvider extends ServiceProvider
 
     private function loadRoutes()
     {
-        return require_once config('logux.routes_path', base_path('/routes/logux.php'));
+        if (!self::$routes) {
+            self::$routes = require config('logux.routes_path', base_path('/routes/logux.php'));
+        }
+
+        return self::$routes;
     }
 }
