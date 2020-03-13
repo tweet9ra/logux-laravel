@@ -17,11 +17,13 @@ class LoguxServiceProvider extends ServiceProvider
 
     public function register()
     {
-        LoguxApp::getInstance()->loadConfig(
-            config('logux.password'),
-            config('logux.control_url'),
-            config('logux.protocol_version')
-        );
+        if (($password = config('logux.password')) && ($url = config('logux.control_url'))) {
+            LoguxApp::getInstance()->loadConfig(
+                $password,
+                $url,
+                config('logux.protocol_version')
+            );
+        }
 
         $this->app->singleton(LoguxApp::class, function($app) {
             return LoguxApp::getInstance();
