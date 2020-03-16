@@ -6,11 +6,6 @@ use \tweet9ra\Logux\DispatchableAction;
 use Illuminate\Support\Facades\Auth;
 
 return [
-    /**
-     * Processing subscribe action
-     * @param \tweet9ra\Logux\ProcessableAction $action
-     * @return void Return result of actions callback is not used, you must affect Action Object
-     */
     'logux/subscribe' => require_once 'logux-subscription.php',
     /**
      * Check user credentials
@@ -19,8 +14,11 @@ return [
      * @param string $authId Authentication command ID
      * @return bool
      */
-    'auth' => function (string $authId, $userId, $token) : bool
-    {
+    'auth' => function (string $authId, string $userId = null, string $token = null): bool {
+        if (!$userId) {
+            return true;
+        }
+        
         return true;
     },
     'ANOTHER_ACTION' => 'ActionController@anotherAction',
