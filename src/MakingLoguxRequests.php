@@ -3,6 +3,7 @@
 
 namespace tweet9ra\Logux\Laravel;
 
+use tweet9ra\Logux\ActionsDispatcherBase;
 use tweet9ra\Logux\App;
 use tweet9ra\Logux\StackActionsDispatcher;
 
@@ -11,25 +12,6 @@ use tweet9ra\Logux\StackActionsDispatcher;
  */
 trait MakingLoguxRequests
 {
-    /**
-     * Keeps in itself dispatched actions
-     * @var StackActionsDispatcher $loguxDispatcher
-     */
-    protected $loguxDispatcher;
-
-    protected function setUp(): void
-    {
-        $this->setLoguxDispatcher();
-        parent::setUp();
-    }
-
-    protected function setLoguxDispatcher()
-    {
-        $dispatcher = new StackActionsDispatcher();
-        App::getInstance()->setActionsDispatcher($dispatcher);
-        $this->loguxDispatcher = $dispatcher;
-    }
-
     /**
      * @param string $actionType
      * @param string|int|false $userId
@@ -65,8 +47,8 @@ trait MakingLoguxRequests
     public function loguxRequest(array $commands, $checkResponseStatus = true)
     {
         $response = $this->postJson(config('logux.endpoint_url'), [
-            'version' => App::getInstance()->getVersion(),
-            'password' => App::getInstance()->getControlPassword(),
+            'version' => config('LOGUX_PROTOCOL_VERSION', 2),
+            'password' => config('LOGUX_PASSWORD', 'secret'),
             'commands' => $commands
         ]);
 
@@ -81,7 +63,7 @@ trait MakingLoguxRequests
 
     public function assertLoguxActionDispatched(string $actionType)
     {
-        $action = $this->loguxDispatcher->search($actionType);
+        $action = app(ActionsDispatcherBase::class)->search($actionType);
         $this->assertTrue(!empty($action), "Action $actionType was not dispatched");
         return $action;
     }

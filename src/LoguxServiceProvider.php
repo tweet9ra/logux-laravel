@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use tweet9ra\Logux\ActionsDispatcherBase;
 use tweet9ra\Logux\App;
-use tweet9ra\Logux\App as LoguxApp;
 use tweet9ra\Logux\CommandsProcessor;
 use tweet9ra\Logux\CurlActionsDispatcher;
 use tweet9ra\Logux\DispatchableAction;
@@ -22,9 +21,9 @@ class LoguxServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $password = config('logux.password');
+        $password = config('logux.password', 'secret');
         $url = config('logux.control_url');
-        if (!$password || !$url) {
+        if (!$url && !$this->app->runningUnitTests()) {
             return;
         }
 
