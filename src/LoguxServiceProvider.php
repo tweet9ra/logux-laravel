@@ -21,8 +21,8 @@ class LoguxServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $password = config('logux.password', 'secret');
-        $url = config('logux.control_url');
+        $password = $this->config('password', 'secret');
+        $url = $this->config('control_url');
         if (!$url && !$this->app->runningUnitTests()) {
             return;
         }
@@ -47,17 +47,13 @@ class LoguxServiceProvider extends ServiceProvider
                 $app['tweet9ra.logux.actions_dispatcher'],
                 $app['tweet9ra.logux.events_handler'],
                 $password,
-                config('logux.protocol_version')
+                $this->config('protocol_version')
             );
         });
     }
 
     public function boot()
     {
-        $this->app->singleton(ActionsDispatcherBase::class, function ($app) {
-            return $app['tweet9ra.logux.actions_dispatcher'];
-        });
-
         $this->publishes([
             __DIR__.'/../config/config.php' => config_path('logux.php')
         ], 'config');
@@ -69,6 +65,16 @@ class LoguxServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/subscription-routes.php' => base_path('/routes/logux-subscription.php')
         ], 'routes');
+
+        if (!$this->config()) {
+            // Config is not published
+            return;
+        }
+
+        $this->app->singleton(ActionsDispatcherBase::class, function ($app) {
+            return $app['tweet9ra.logux.actions_dispatcher'];
+        });
+
 
         /** @var App $loguxApp */
         $loguxApp = $this->app[App::class];
@@ -87,7 +93,7 @@ class LoguxServiceProvider extends ServiceProvider
             );
 
         // Registering route that handle logux requests
-        $route = Route::post(config('logux.endpoint_url'), function () use ($loguxApp) {
+        $route = Route::post($this->config('endpoint_url'), function () use ($loguxApp) {
             $loguxApp->setActionsMap($this->loadRoutes());
 
             $request = json_decode(request()->getContent(), true);
@@ -96,7 +102,7 @@ class LoguxServiceProvider extends ServiceProvider
             return json_encode($responseContent, JSON_UNESCAPED_UNICODE);
         });
 
-        if ($middleware = config('logux.middleware')) {
+        if ($middleware = $this->config('middleware')) {
             if (is_string($middleware)) {
                 $middleware = explode(',', $middleware);
             }
@@ -104,10 +110,15 @@ class LoguxServiceProvider extends ServiceProvider
         }
     }
 
+    protected function config($value = null, $default = null)
+    {
+        return config('logux' . ($value ? ".$value" : ''), $default);
+    }
+
     private function loadRoutes()
     {
         if (!self::$routes) {
-            self::$routes = require config('logux.routes_path', base_path('/routes/logux.php'));
+            self::$routes = require $this->config('routes_path', base_path('/routes/logux.php'));
         }
 
         return self::$routes;
