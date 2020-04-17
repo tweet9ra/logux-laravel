@@ -48,7 +48,7 @@ trait MakingLoguxRequests
     {
         $response = $this->postJson(config('logux.endpoint_url'), [
             'version' => config('LOGUX_PROTOCOL_VERSION', 2),
-            'password' => config('LOGUX_PASSWORD', 'secret'),
+            'secret' => config('LOGUX_PASSWORD', 'secret'),
             'commands' => $commands
         ]);
 
