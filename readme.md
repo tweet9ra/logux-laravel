@@ -18,3 +18,10 @@ This package allows your Laravel application communicate with front-end via WebS
 3. Publish config and routes: `php artisan vendor:publish --provider="tweet9ra\Logux\Laravel\LoguxServiceProvider"`
 
 Configure `config/logux.php` and `routes/logux.php`
+
+#####Version compatibility with logux backend protocol:  
+
+| Package version       | Logux backend protocol version|
+| ------------- |:-------------:|
+| < 4.0.0       | 2             |
+| ^4.0.0        | 3             |
