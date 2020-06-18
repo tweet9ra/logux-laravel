@@ -19,9 +19,10 @@ This package allows your Laravel application communicate with front-end via WebS
 
 Configure `config/logux.php` and `routes/logux.php`
 
-#####Version compatibility with logux backend protocol:  
+#####Version compatibility with logux backend protocol:
 
 | Package version       | Logux backend protocol version|
 | ------------- |:-------------:|
 | < 4.0.0       | 2             |
 | ^4.0.0        | 3             |
+| ^5.0.0        | 4             |
