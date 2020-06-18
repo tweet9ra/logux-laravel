@@ -1,23 +1,23 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "30173e8d53d520b628d08ae176beb264",
+    "content-hash": "cbd66e83d1d99f31f34dc90a20e2948d",
     "packages": [
         {
             "name": "tweet9ra/logux-processor",
-            "version": "4.0.0.x-dev",
+            "version": "5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tweet9ra/logux-php.git",
-                "reference": "4e5ee93c80c06481a04e498fcaaf6713c133687c"
+                "reference": "5a62d768fec553dc63594a9bbf942426d7ea8bb2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tweet9ra/logux-php/zipball/4e5ee93c80c06481a04e498fcaaf6713c133687c",
-                "reference": "4e5ee93c80c06481a04e498fcaaf6713c133687c",
+                "url": "https://api.github.com/repos/tweet9ra/logux-php/zipball/5a62d768fec553dc63594a9bbf942426d7ea8bb2",
+                "reference": "5a62d768fec553dc63594a9bbf942426d7ea8bb2",
                 "shasum": ""
             },
             "require": {
@@ -43,7 +43,7 @@
                     "email": "tweet9ra@mail.ru"
                 }
             ],
-            "time": "2020-04-17T15:42:59+00:00"
+            "time": "2020-06-17T19:06:42+00:00"
         }
     ],
     "packages-dev": [],
@@ -53,5 +53,6 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }
