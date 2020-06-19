@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "tweet9ra/logux-processor",
-            "version": "5.0.1",
+            "version": "5.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tweet9ra/logux-php.git",
-                "reference": "a0399de072a8eb3cd5126dea6b606c4cc6c1fc89"
+                "reference": "a9adf9846559a5b65472afafb8aeeeeb06e6ead5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tweet9ra/logux-php/zipball/a0399de072a8eb3cd5126dea6b606c4cc6c1fc89",
-                "reference": "a0399de072a8eb3cd5126dea6b606c4cc6c1fc89",
+                "url": "https://api.github.com/repos/tweet9ra/logux-php/zipball/a9adf9846559a5b65472afafb8aeeeeb06e6ead5",
+                "reference": "a9adf9846559a5b65472afafb8aeeeeb06e6ead5",
                 "shasum": ""
             },
             "require": {
@@ -47,7 +47,7 @@
                     "email": "dotterian@dotterian.ru"
                 }
             ],
-            "time": "2020-06-19T12:32:31+00:00"
+            "time": "2020-06-19T14:38:48+00:00"
         }
     ],
     "packages-dev": [],
