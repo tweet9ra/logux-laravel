@@ -33,9 +33,9 @@ trait MakingLoguxRequests
         }
 
         return $this->loguxRequest([[
-            'action',
-            array_merge(['type' => $actionType], $arguments),
-            ['id' => "$t $userId:testtt:testtt $userId", 'time' => $t]
+            'command' => 'action',
+            'action' => array_merge(['type' => $actionType], $arguments),
+            'meta' => ['id' => "$t $userId:testtt:testtt $userId", 'time' => $t]
         ]], $checkResponseStatus);
     }
 
@@ -47,7 +47,7 @@ trait MakingLoguxRequests
     public function loguxRequest(array $commands, $checkResponseStatus = true)
     {
         $response = $this->postJson(config('logux.endpoint_url'), [
-            'version' => config('LOGUX_PROTOCOL_VERSION', 2),
+            'version' => config('LOGUX_PROTOCOL_VERSION', 4),
             'secret' => config('LOGUX_PASSWORD', 'secret'),
             'commands' => $commands
         ]);

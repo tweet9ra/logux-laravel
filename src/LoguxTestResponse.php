@@ -41,19 +41,19 @@ class LoguxTestResponse
      */
     public function assertActionProcessedAndApproved()
     {
-        $this->assertJson([['approved'], ['processed']]);
+        $this->assertJson([['answer' => 'approved'], ['answer' => 'processed']]);
     }
 
     /**
      * Check that executed action has errors
-     * @param string[]|null $errorMessages If you want to check error strings
+     * @param string|null $errorMessage If you want to check error strings
      */
-    public function assertActionHasError(array $errorMessages = null)
+    public function assertActionHasError(string $errorMessage = null)
     {
-        if ($errorMessages) {
-            $this->assertJson([array_merge(['error'], $errorMessages)]);
+        if ($errorMessage) {
+            $this->assertJson([['answer' => 'error', 'details' => $errorMessage]]);
         } else {
-            $this->assertJson([['error']]);
+            $this->assertJson([['answer' => 'error']]);
         }
     }
 
@@ -61,13 +61,13 @@ class LoguxTestResponse
     {
         $resends = [];
         foreach ($this->json() as $actions) {
-            if ($actions[0] === 'resend') {
-                $resends[] = $actions[2];
+            if ($actions['answer'] === 'resend') {
+                $resends[] = $actions['channels'];
             } else {
                 continue;
             }
 
-            if ($actions[2] === $recipients) {
+            if ($actions['channels'] === $recipients) {
                 return $this;
             }
         }
